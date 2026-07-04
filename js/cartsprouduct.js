@@ -12,21 +12,23 @@ document.addEventListener("DOMContentLoaded", () => {
         cartContainer.innerHTML = cart.length
             ? cart.map((item) => {
                 const product = Store.findProduct(item.id);
+                const unitPrice = Store.getItemUnitPrice(item);
+                const unitPriceAttr = item.unitPrice != null ? ` data-unit-price="${item.unitPrice}"` : "";
                 return `
                     <article class="cart-line">
                         <a href="product.html?id=${product.id}"><img src="${product.imageUrl}" alt="${Store.escapeHtml(product.title)}"></a>
                         <div class="cart-line-info">
                             <span>${product.category}</span>
                             <h3><a href="product.html?id=${product.id}">${Store.escapeHtml(product.title)}</a></h3>
-                            <strong>${Store.formatPrice(product.price)}</strong>
+                            <strong>${Store.formatPrice(unitPrice)}</strong>
                         </div>
                         <div class="quantity-control" aria-label="Quantity for ${Store.escapeHtml(product.title)}">
-                            <button data-quantity="${product.id}" data-change="-1" aria-label="Decrease quantity">−</button>
+                            <button data-quantity="${product.id}" data-change="-1"${unitPriceAttr} aria-label="Decrease quantity">−</button>
                             <span>${item.quantity}</span>
-                            <button data-quantity="${product.id}" data-change="1" aria-label="Increase quantity">+</button>
+                            <button data-quantity="${product.id}" data-change="1"${unitPriceAttr} aria-label="Increase quantity">+</button>
                         </div>
-                        <strong class="line-total">${Store.formatPrice(product.price * item.quantity)}</strong>
-                        <button class="remove-button" data-remove="${product.id}" aria-label="Remove ${Store.escapeHtml(product.title)}">Remove</button>
+                        <strong class="line-total">${Store.formatPrice(unitPrice * item.quantity)}</strong>
+                        <button class="remove-button" data-remove="${product.id}"${unitPriceAttr} aria-label="Remove ${Store.escapeHtml(product.title)}">Remove</button>
                     </article>`;
             }).join("")
             : '<div class="empty-state"><h2>Your Cart Is Empty</h2><p>Add a few products and they will appear here.</p><a class="button" href="index.html">Continue Shopping</a></div>';
@@ -48,11 +50,15 @@ document.addEventListener("DOMContentLoaded", () => {
     cartContainer.addEventListener("click", (event) => {
         const quantityButton = event.target.closest("[data-quantity]");
         const removeButton = event.target.closest("[data-remove]");
+        const lineUnitPrice = (element) => (element.dataset.unitPrice ? Number(element.dataset.unitPrice) : undefined);
+
         if (quantityButton) {
-            const item = Store.getCart().find((entry) => entry.id === Number(quantityButton.dataset.quantity));
-            Store.updateQuantity(item.id, item.quantity + Number(quantityButton.dataset.change));
+            const unitPrice = lineUnitPrice(quantityButton);
+            const item = Store.getCart().find((entry) => entry.id === Number(quantityButton.dataset.quantity)
+                && (entry.unitPrice ?? null) === (unitPrice ?? null));
+            Store.updateQuantity(item.id, item.quantity + Number(quantityButton.dataset.change), unitPrice);
         }
-        if (removeButton) Store.removeFromCart(removeButton.dataset.remove);
+        if (removeButton) Store.removeFromCart(removeButton.dataset.remove, lineUnitPrice(removeButton));
     });
 
     document.querySelector("#checkout_link").addEventListener("click", (event) => {

@@ -16,7 +16,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const shipping = subtotal >= 3000 ? 0 : 120;
     document.querySelector("#checkout_items").innerHTML = cart.map((item) => {
         const product = Store.findProduct(item.id);
-        return `<div class="checkout-item"><img src="${product.imageUrl}" alt=""><span>${Store.escapeHtml(product.title)} <small>×${item.quantity}</small></span><strong>${Store.formatPrice(product.price * item.quantity)}</strong></div>`;
+        const unitPrice = Store.getItemUnitPrice(item);
+        return `<div class="checkout-item"><img src="${product.imageUrl}" alt=""><span>${Store.escapeHtml(product.title)} <small>×${item.quantity}</small></span><strong>${Store.formatPrice(unitPrice * item.quantity)}</strong></div>`;
     }).join("");
     document.querySelector("#checkout_subtotal").textContent = Store.formatPrice(subtotal);
     document.querySelector("#checkout_shipping").textContent = shipping ? Store.formatPrice(shipping) : "Free";

@@ -58,21 +58,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const related = Store.products.filter((item) => item.category === product.category && item.id !== product.id).slice(0, 3);
     const recommended = Store.products.filter((item) => item.category !== product.category && item.id !== product.id).sort((a, b) => b.rating - a.rating).slice(0, 3);
-    const bundleRecommendations = {
-        1: [12, 7, 5], 15: [12, 7, 5],
-        2: [8, 9, 14],
-        3: [6, 5, 7],
-        4: [5, 7, 14],
-        8: [9, 10, 7],
-        9: [8, 10, 7],
-        13: [6, 5, 7]
-    };
-    const companionIds = bundleRecommendations[product.id] || [5, 7, 14];
-    const companions = companionIds.map(Store.findProduct).filter((item) => item && item.id !== product.id);
-    const bundleItems = [product, ...companions];
-    const bundleOriginalTotal = bundleItems.reduce((sum, item) => sum + item.price, 0);
-    const bundlePrice = Math.round(bundleOriginalTotal * 0.9);
-    const bundleSavings = bundleOriginalTotal - bundlePrice;
+    const bundlePricing = Store.getBundleForProduct(product.id);
+    const { items: bundleItems, originalTotal: bundleOriginalTotal, bundlePrice, savings: bundleSavings } = bundlePricing;
 
     document.querySelector("#related_products").innerHTML = related.map(Store.productCard).join("");
     document.querySelector("#recommended_products").innerHTML = recommended.map(Store.productCard).join("");
@@ -82,14 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <div class="bundle-offer-banner"><span>Bundle Offer</span><strong>Buy Together And Save 10%</strong><p>Handpicked accessories that work well with this product.</p></div>
             <div class="bundle-card"><div class="bundle-products">${bundleItems.map((item, index) => `${index ? "<span>+</span>" : ""}<a href="product.html?id=${item.id}"><img src="${item.imageUrl}" alt="${Store.escapeHtml(item.title)}"><small>${Store.escapeHtml(item.title)}</small></a>`).join("")}</div><div class="bundle-pricing"><p>Original Total <del>${Store.formatPrice(bundleOriginalTotal)}</del></p><span>Bundle Price</span><strong>${Store.formatPrice(bundlePrice)}</strong><small>You Save ${Store.formatPrice(bundleSavings)}</small><button class="button" id="add_bundle">Add Bundle to Cart</button></div></div>
         </div>`;
-    document.querySelector("#add_bundle").addEventListener("click", () => {
-        if (!Store.isLoggedIn()) {
-            Store.addToCart(product.id);
-            return;
-        }
-        bundleItems.forEach((item) => Store.addToCart(item.id, 1, { silent: true }));
-        Store.toast("Bundle Added to Cart Successfully", "success");
-    });
+    document.querySelector("#add_bundle").addEventListener("click", () => Store.addBundleToCart(product.id));
 
     const reviews = product.reviews.length ? product.reviews : [
         { name: "Salma M.", rating: 5, text: "The product matched the description, arrived well packed, and feels thoughtfully made." },

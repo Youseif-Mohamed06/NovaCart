@@ -31,6 +31,18 @@ const Store = (() => {
         product({ id: 16, title: "VoltMax Outdoor 30K Power Bank", category: "Accessories", brand: "VoltMax", description: "A rugged high-capacity power bank with multiple outputs, an emergency light, and easy-read display.", price: 549, badge: "Limited Stock", stock: 3, rating: 4.6, reviewCount: 29, imageUrl: "image/ChatGPT Image Feb 25, 2026, 04_29_38 PM.png", dimensions: "16.8 × 8.2 × 3.4 cm", weight: "610 g", warranty: "18 months", features: ["30,000 mAh capacity", "Six charging outputs", "Built-in LED light", "Rugged shell"], specifications: { Output: "22.5 W max", Input: "USB-C", Display: "Digital percentage" } })
     ];
 
+    const BUNDLE_DISCOUNT_RATE = 0.1;
+    const BUNDLE_RECOMMENDATIONS = {
+        1: [12, 7, 5], 15: [12, 7, 5],
+        2: [8, 9, 14],
+        3: [6, 5, 7],
+        4: [5, 7, 14],
+        8: [9, 10, 7],
+        9: [8, 10, 7],
+        13: [6, 5, 7]
+    };
+    const DEFAULT_BUNDLE_COMPANIONS = [5, 7, 14];
+
     const read = (key, fallback = []) => {
         try {
             const value = JSON.parse(localStorage.getItem(key));
@@ -43,6 +55,53 @@ const Store = (() => {
     const write = (key, value) => localStorage.setItem(key, JSON.stringify(value));
     const findProduct = (id) => products.find((product) => product.id === Number(id));
 
+    function getBundleItems(productId) {
+        const product = findProduct(productId);
+        if (!product) return [];
+        const companionIds = BUNDLE_RECOMMENDATIONS[product.id] || DEFAULT_BUNDLE_COMPANIONS;
+        const companions = companionIds.map(findProduct).filter((item) => item && item.id !== product.id);
+        return [product, ...companions];
+    }
+
+    function calculateBundlePricing(items) {
+        if (!items.length) {
+            return { items: [], originalTotal: 0, bundlePrice: 0, savings: 0, unitPrices: [] };
+        }
+
+        const originalTotal = items.reduce((sum, item) => sum + item.price, 0);
+        const bundlePrice = Math.round(originalTotal * (1 - BUNDLE_DISCOUNT_RATE));
+        const savings = originalTotal - bundlePrice;
+        const unitPrices = [];
+        let allocated = 0;
+
+        items.forEach((item, index) => {
+            if (index === items.length - 1) {
+                unitPrices.push(bundlePrice - allocated);
+                return;
+            }
+
+            const discountedUnitPrice = Math.round((item.price / originalTotal) * bundlePrice);
+            unitPrices.push(discountedUnitPrice);
+            allocated += discountedUnitPrice;
+        });
+
+        return { items, originalTotal, bundlePrice, savings, unitPrices };
+    }
+
+    function getBundleForProduct(productId) {
+        return calculateBundlePricing(getBundleItems(productId));
+    }
+
+    function getItemUnitPrice(item) {
+        return item.unitPrice != null ? Number(item.unitPrice) : findProduct(item.id).price;
+    }
+
+    function mergeCartLine(cart, line) {
+        const existing = cart.find((entry) => entry.id === line.id && (entry.unitPrice ?? null) === (line.unitPrice ?? null));
+        if (existing) existing.quantity += line.quantity;
+        else cart.push({ ...line });
+    }
+
     function getCart() {
         if (!isLoggedIn()) {
             localStorage.removeItem(KEYS.cart);
@@ -50,16 +109,20 @@ const Store = (() => {
         }
 
         const saved = read(KEYS.cart);
-        const grouped = new Map();
+        const merged = new Map();
 
         saved.forEach((item) => {
             const id = Number(item.id);
             if (!findProduct(id)) return;
             const quantity = Number(item.quantity) || 1;
-            grouped.set(id, (grouped.get(id) || 0) + quantity);
+            const unitPrice = item.unitPrice != null ? Number(item.unitPrice) : undefined;
+            const key = `${id}:${unitPrice ?? "catalog"}`;
+            const existing = merged.get(key);
+            if (existing) existing.quantity += quantity;
+            else merged.set(key, { id, quantity, ...(unitPrice != null ? { unitPrice } : {}) });
         });
 
-        return [...grouped].map(([id, quantity]) => ({ id, quantity }));
+        return [...merged.values()];
     }
 
     function saveCart(cart) {
@@ -85,25 +148,38 @@ const Store = (() => {
         if (!requireAuthentication()) return;
         const cart = getCart();
         const selectedProduct = findProduct(id);
-        const item = cart.find((entry) => entry.id === Number(id));
-        if (item) item.quantity += quantity;
-        else cart.push({ id: Number(id), quantity });
+        mergeCartLine(cart, { id: Number(id), quantity });
         saveCart(cart);
         if (!options.silent) toast(`${selectedProduct.title} Added to Cart`, "success");
     }
 
-    function updateQuantity(id, quantity) {
+    function addBundleToCart(productId) {
+        if (!requireAuthentication()) return;
+        const pricing = getBundleForProduct(productId);
+        if (!pricing.items.length) return;
+
         const cart = getCart();
-        const item = cart.find((entry) => entry.id === Number(id));
+        pricing.items.forEach((item, index) => {
+            mergeCartLine(cart, { id: item.id, quantity: 1, unitPrice: pricing.unitPrices[index] });
+        });
+        saveCart(cart);
+        toast("Bundle Added to Cart Successfully", "success");
+    }
+
+    function updateQuantity(id, quantity, unitPrice = undefined) {
+        const cart = getCart();
+        const item = cart.find((entry) => entry.id === Number(id) && (entry.unitPrice ?? null) === (unitPrice ?? null));
         if (!item) return;
         item.quantity = Math.max(0, Number(quantity));
         saveCart(cart);
     }
 
-    const removeFromCart = (id) => saveCart(getCart().filter((item) => item.id !== Number(id)));
+    const removeFromCart = (id, unitPrice = undefined) => saveCart(
+        getCart().filter((item) => !(item.id === Number(id) && (item.unitPrice ?? null) === (unitPrice ?? null)))
+    );
     const clearCart = () => saveCart([]);
     const cartCount = () => getCart().reduce((sum, item) => sum + item.quantity, 0);
-    const cartSubtotal = () => getCart().reduce((sum, item) => sum + findProduct(item.id).price * item.quantity, 0);
+    const cartSubtotal = () => getCart().reduce((sum, item) => sum + getItemUnitPrice(item) * item.quantity, 0);
 
     function getFavorites() {
         if (!isLoggedIn()) return [];
@@ -268,9 +344,10 @@ if (cartButton) {
     }
 
     return {
-        products, findProduct, getCart, addToCart, updateQuantity, removeFromCart, clearCart,
+        products, findProduct, getCart, addToCart, addBundleToCart, updateQuantity, removeFromCart, clearCart,
         cartCount, cartSubtotal, getFavorites, toggleFavorite, isFavorite, isLoggedIn,
-        formatPrice, discountPercent, escapeHtml, toast, productCard, renderHeader, bindSharedEvents, KEYS
+        formatPrice, discountPercent, escapeHtml, toast, productCard, renderHeader, bindSharedEvents,
+        getBundleForProduct, getBundleItems, calculateBundlePricing, getItemUnitPrice, KEYS
     };
 })();
 
