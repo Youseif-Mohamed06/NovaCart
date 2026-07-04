@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout | NovaCart</title>
     <link rel="stylesheet" href="css/stylesheet.css">
+    <script>!function(){try{"dark"===localStorage.getItem("novacart-theme")&&document.documentElement.setAttribute("data-theme","dark")}catch(e){}}();</script>
 </head>
 <body>
-    <header class="checkout-header"><div class="container"><a href="index.html" class="brand"><span>N</span>NovaCart</a><div class="secure-label">Secure demo checkout</div></div></header>
+    <header class="checkout-header"><div class="container"><a href="index.html" class="brand"><span>N</span>NovaCart</a><div class="checkout-header-actions"><button type="button" id="theme_toggle" class="theme-toggle" aria-label="Switch to dark mode" aria-pressed="false"><svg class="icon-moon" aria-hidden="true" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg><svg class="icon-sun" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></button><div class="secure-label">Secure demo checkout</div></div></div></header>
     <main class="container checkout-main">
         <div class="page-heading"><span class="eyebrow">Almost there</span><h1>Checkout</h1></div>
         <div id="checkout_content" class="checkout-layout">
@@ -46,5 +47,6 @@
     </main>
     <script src="js/store.js"></script>
     <script src="js/checkout.js"></script>
+    <script src="js/theme.js"></script>
 </body>
 </html>

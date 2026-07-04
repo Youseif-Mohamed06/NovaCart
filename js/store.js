@@ -204,7 +204,7 @@ const Store = (() => {
         if (items) {
             const cart = getCart();
             items.innerHTML = cart.length
-                ? cart.slice(0, 4).map((item) => `<div class="mini-cart-item"><span>${escapeHtml(findProduct(item.id).title)}</span><b>×${item.quantity}</b></div>`).join("")
+                ? cart.map((item) => `<div class="mini-cart-item"><span>${escapeHtml(findProduct(item.id).title)}</span><b>×${item.quantity}</b></div>`).join("")
                 : '<p class="empty-mini-cart">Your cart is empty.</p>';
         }
     }

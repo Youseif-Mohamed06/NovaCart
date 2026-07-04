@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your cart | NovaCart</title>
     <link rel="stylesheet" href="css/stylesheet.css">
+    <script>!function(){try{"dark"===localStorage.getItem("novacart-theme")&&document.documentElement.setAttribute("data-theme","dark")}catch(e){}}();</script>
 </head>
 <body>
     <header class="site-header">
@@ -13,6 +14,7 @@
             <nav aria-label="Main navigation">
                 <ul id="links"><li><a href="login.html">Sign In</a></li><li><a class="button button-small" href="register.html">Create Account</a></li></ul>
                 <ul id="user_info" hidden><li><span class="user-greeting">Hello, <b id="user"></b></span></li><li><a href="wishlist.html">Wishlist</a></li><li><a href="#" id="logout">Log Out</a></li></ul>
+                <button type="button" id="theme_toggle" class="theme-toggle" aria-label="Switch to dark mode" aria-pressed="false"><svg class="icon-moon" aria-hidden="true" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg><svg class="icon-sun" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></button>
                 <div class="shopping_cart"><a class="cart-button" href="cartsproducts.html" aria-label="View cart"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 3h2l2.1 10.1a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.6L20 7H6M9 20a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm8 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"/></svg><span class="badge">0</span></a></div>
             </nav>
         </div>
@@ -38,5 +40,6 @@
     </main>
     <script src="js/store.js"></script>
     <script src="js/cartsprouduct.js"></script>
+    <script src="js/theme.js"></script>
 </body>
 </html>
