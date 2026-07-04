@@ -3,97 +3,174 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="css/stylesheet.css"/>
-    <link rel="stylesheet" href="css/all.css"/>
+    <meta name="description" content="Discover useful technology and everyday accessories at NovaCart.">
+    <title>NovaCart | Modern Tech Essentials</title>
+    <link rel="stylesheet" href="css/all.css">
+    <link rel="stylesheet" href="css/stylesheet.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@700;800&display=swap" rel="stylesheet">
 </head>
-<body>
-    <header>
-         <div class="container">
-
-             <div class="header-content">
-                <a href="index.html" class="brand">Shopping Cart</a>
-
-              <nav>
-                  <ul id="links">
-                      <li><a href="login.html">Sing in</a></li>
-                      <li><a href="register.html">Sign up</a></li>
-                  </ul>
-                  <ul id="user_info">
-                    <li><a href="#" id="user"></a></li>
-                    <li class="shopping_cart">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span class="badge">0</span>
-
-                        <div class="carts_products">
-                            <p class="cart_title">Your Selection</p>
-                             <div class="cart_items"></div>
-                             <div class="cart_total">
-                                Total: <span id="total_price">0</span> $
-                                </div>
-                            <a href="cartsproducts.html">View All Products</a>
-                        </div>
-                    </li>
-                    <li><a href="login.html" id="logout">Log Out</a></li>
-                  </ul>
-              </nav>
-             </div>
-              
-         </div>
-    </header>
-    
-
-
-
-
-    <section class="home">
-          <div class="container">
-            <div class="search_container">
-    
-               <h2 class="search_title">Search Products</h2>
-
-                <div class="search_box">
-                     <input type="text" placeholder="Search by product name..." id="search_input">
-                     <button id="search_btn">Search</button>
+<body id="top">
+    <header class="site-header">
+        <div class="container header-content">
+            <a href="index.html" class="brand"><span>N</span>NovaCart</a>
+            <nav aria-label="Main navigation">
+                <ul id="links">
+                    <li><a href="login.html">Sign In</a></li>
+                    <li><a class="button button-small" href="register.html">Create Account</a></li>
+                </ul>
+                <ul id="user_info" hidden>
+                    <li><span class="user-greeting">Hello, <b id="user"></b></span></li>
+                    <li><a href="wishlist.html">Wishlist</a></li>
+                    <li><a href="#" id="logout">Log Out</a></li>
+                </ul>
+                <div class="shopping_cart">
+                    <button id="cart_toggle" class="cart-button" aria-label="Open cart preview"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 3h2l2.1 10.1a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.6L20 7H6M9 20a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm8 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"/></svg><span class="badge">0</span></button>
+                    <div class="carts_products">
+                        <div class="mini-cart-header"><strong>Your Cart</strong><span id="total_price">EGP 0</span></div>
+                        <div class="cart_items"></div>
+                        <a class="button" href="cartsproducts.html">View Cart</a>
+                    </div>
                 </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container hero-content">
+                <div>
+                    <span class="eyebrow">Smart Choices, Simple Shopping</span>
+                    <h1>Technology That Fits<br><span>Your Everyday Life.</span></h1>
+                    <p>Explore dependable devices and accessories selected for work, play, and everything in between.</p>
+                    <a class="button" href="#shop">Shop the Collection</a>
+                    <div class="hero-trust"><span>✓ Secure demo checkout</span><span>✓ Free delivery over EGP 3,000</span></div>
+                </div>
+                <div class="hero-card" aria-label="Featured offer">
+                    <span>Featured</span>
+                    <strong>Upgrade your setup</strong>
+                    <p>Highly rated essentials, ready when you are.</p>
+                    <div class="hero-stat"><b>4.7</b><small>average product rating</small></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="offers-section container" id="offers">
+            <div class="section-heading">
+                <div><span class="eyebrow">Limited-Time Savings</span><h2>Current Offers</h2></div>
+                <a class="text-link" href="#shop">View All Products →</a>
+            </div>
+            <div id="offers_grid" class="offers-grid" aria-live="polite"></div>
+        </section>
+
+        <section class="shop-section container" id="shop">
+            <div class="section-heading">
+                <div><span class="eyebrow">Our Collection</span><h2>Find Your Next Essential</h2></div>
+                <span id="result_count" class="result-count"></span>
+            </div>
+            <div class="filters">
+                <label class="search-field">
+                    <span class="sr-only">Search products</span>
+                    <input type="search" placeholder="Search products…" id="search_input">
+                    <div id="search_suggestions" class="search-suggestions" role="listbox" hidden></div>
+                </label>
+                <select id="category_filter" aria-label="Filter by category">
+                    <option value="all">All Categories</option>
+                    <option value="Accessories">Accessories</option>
+                    <option value="Audio">Audio</option>
+                    <option value="Computers">Computers</option>
+                    <option value="Gaming">Gaming</option>
+                    <option value="Wearables">Wearables</option>
+                </select>
+                <select id="sort_products" aria-label="Sort products">
+                    <option value="featured">Featured</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                    <option value="rating">Highest Rated</option>
+                </select>
+            </div>
+            <div id="products_grid" class="products" aria-live="polite"></div>
+            <div class="load-more-wrap"><button id="load_more" class="button button-secondary" type="button">Load More Products</button></div>
+        </section>
+    </main>
+
+    <footer class="footer">
+    <div class="container footer-grid">
+
+        <div class="footer-column">
+            <a href="index.html" class="brand">
+                <span>N</span>NovaCart
+            </a>
+
+            <p class="footer-desc">
+                Modern Electronics & Smart Accessories for Everyday Life.
+            </p>
+
+            <a href="tel:+201001234567" class="support-phone">
+                <i class="fa-solid fa-phone"></i>
+                +20 100 123 4567
+            </a>
+
+            <a href="mailto:support@novacart.com" class="support-phone">
+                <i class="fa-solid fa-envelope"></i>
+                support@novacart.com
+            </a>
+        </div>
+
+        <div class="footer-column">
+            <h3>Quick Links</h3>
+
+            <a href="#top">Home</a>
+            <a href="#shop">Products</a>
+            <a href="wishlist.html">Wishlist</a>
+            <a href="#">Contact Us</a>
+        </div>
+
+        <div class="footer-column">
+            <h3>Information</h3>
+
+            <a href="privacy.html">Privacy Policy</a>
+
+            <a href="terms.html">Terms & Conditions</a>
+
+            <a href="shipping.html">Shipping Policy</a>
+
+            <a href="returns.html">Returns</a>
+
+            <a href="contact.html">Contact Us</a>
+        </div>
+
+        <div class="footer-column">
+            <h3>Follow Us</h3>
+
+            <div class="footer-socials">
+
+                <a href="#">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+
+                <a href="#">
+                    <i class="fab fa-instagram"></i>
+                </a>
+
+                <a href="#">
+                    <i class="fab fa-tiktok"></i>
+                </a>
+
+                <a href="#">
+                    <i class="fab fa-whatsapp"></i>
+                </a>
 
             </div>
+        </div>
 
-              <div class="products"></div>
-         </div>
-         
-    </section>
+    </div>
 
+    <div class="footer-bottom">
+        © 2026 NovaCart. All Rights Reserved.
+    </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+</footer>
+    <script src="js/store.js"></script>
     <script src="js/script.js"></script>
-    
 </body>
 </html>

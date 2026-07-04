@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="View products saved to your NovaCart wishlist.">
+    <title>Your wishlist | NovaCart</title>
+    <link rel="stylesheet" href="css/stylesheet.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-content">
+            <a href="index.html" class="brand"><span>N</span>NovaCart</a>
+            <nav aria-label="Main navigation">
+                <ul id="links"><li><a href="login.html">Sign In</a></li><li><a class="button button-small" href="register.html">Create Account</a></li></ul>
+                <ul id="user_info" hidden><li><span class="user-greeting">Hello, <b id="user"></b></span></li><li><a href="wishlist.html" aria-current="page">Wishlist</a></li><li><a href="#" id="logout">Log Out</a></li></ul>
+                <div class="shopping_cart"><a class="cart-button" href="cartsproducts.html" aria-label="View cart"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 3h2l2.1 10.1a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.6L20 7H6M9 20a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm8 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"/></svg><span class="badge">0</span></a></div>
+            </nav>
+        </div>
+    </header>
+    <main class="container page-main">
+        <nav class="breadcrumb" aria-label="Breadcrumb"><a href="index.html">Home</a><span>›</span><span>Wishlist</span></nav>
+        <div class="page-heading"><span class="eyebrow">Saved for Later</span><h1>Your Wishlist</h1><p>Keep track of the products you are considering.</p></div>
+        <div id="wishlist_products" class="products" aria-live="polite"></div>
+    </main>
+    <script src="js/store.js"></script>
+    <script src="js/wishlist.js"></script>
+</body>
+</html>

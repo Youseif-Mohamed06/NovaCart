@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Your NovaCart demo order has been confirmed.">
+    <title>Order confirmed | NovaCart</title>
+    <link rel="stylesheet" href="css/stylesheet.css">
+</head>
+<body>
+    <header class="checkout-header">
+        <div class="container">
+            <a href="index.html" class="brand"><span>N</span>NovaCart</a>
+            <div class="secure-label">Order complete</div>
+        </div>
+    </header>
+
+    <main class="container checkout-main">
+        <section class="order-success" aria-labelledby="success_title">
+            <div class="success-icon" aria-hidden="true">✓</div>
+            <span class="eyebrow">Order confirmed</span>
+            <h1 id="success_title">Thanks for your order!</h1>
+            <p>Your demo order <strong id="order_number"></strong> has been placed successfully. No payment was processed.</p>
+            <a class="button" href="index.html">Continue shopping</a>
+        </section>
+    </main>
+
+    <script src="js/order-success.js"></script>
+</body>
+</html>

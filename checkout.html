@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | NovaCart</title>
+    <link rel="stylesheet" href="css/stylesheet.css">
+</head>
+<body>
+    <header class="checkout-header"><div class="container"><a href="index.html" class="brand"><span>N</span>NovaCart</a><div class="secure-label">Secure demo checkout</div></div></header>
+    <main class="container checkout-main">
+        <div class="page-heading"><span class="eyebrow">Almost there</span><h1>Checkout</h1></div>
+        <div id="checkout_content" class="checkout-layout">
+            <form id="checkout_form" class="checkout-form">
+                <section class="checkout-section">
+                    <div class="step-number">1</div><div><h2>Contact Information</h2><p>We will send your order confirmation here.</p></div>
+                    <div class="form-grid">
+                        <label class="full">Email Address<input type="email" id="checkout_email" required></label>
+                        <label>First Name<input type="text" name="firstName" required></label>
+                        <label>Last Name<input type="text" name="lastName" required></label>
+                        <label class="full">Phone Number<input type="tel" name="phone" placeholder="+20 100 000 0000" required></label>
+                    </div>
+                </section>
+                <section class="checkout-section">
+                    <div class="step-number">2</div><div><h2>Delivery Address</h2><p>Enter a complete address for this demo order.</p></div>
+                    <div class="form-grid">
+                        <label class="full">Street Address<input type="text" name="address" required></label>
+                        <label>City<input type="text" name="city" required></label>
+                        <label>Governorate<select name="governorate" required><option value="">Select one</option><option>Cairo</option><option>Giza</option><option>Alexandria</option><option>Other</option></select></label>
+                    </div>
+                </section>
+                <section class="checkout-section">
+                    <div class="step-number">3</div><div><h2>Payment Method</h2><p>No real payment will be processed.</p></div>
+                    <label class="payment-option"><input type="radio" name="payment" value="Cash on delivery" checked><span><b>Cash on Delivery</b><small>Pay when your order arrives</small></span></label>
+                    <label class="payment-option"><input type="radio" name="payment" value="Demo card"><span><b>Demo Card</b><small>Simulated card payment</small></span></label>
+                    <div id="card_fields" class="form-grid card-fields" hidden>
+                        <label class="full">Card Number<input type="text" inputmode="numeric" maxlength="19" placeholder="4242 4242 4242 4242"></label>
+                        <label>Expiry Date<input type="text" maxlength="5" placeholder="MM/YY"></label>
+                        <label>CVV<input type="text" inputmode="numeric" maxlength="3" placeholder="123"></label>
+                    </div>
+                </section>
+                <button class="button button-full button-large" type="submit">Place Demo Order</button>
+            </form>
+            <aside class="order-summary checkout-summary"><h2>Your Order</h2><div id="checkout_items"></div><div><span>Subtotal</span><strong id="checkout_subtotal"></strong></div><div><span>Delivery</span><strong id="checkout_shipping"></strong></div><div class="summary-total"><span>Total</span><strong id="checkout_total"></strong></div></aside>
+        </div>
+    </main>
+    <script src="js/store.js"></script>
+    <script src="js/checkout.js"></script>
+</body>
+</html>

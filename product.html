@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your cart | NovaCart</title>
+    <title>Product details | NovaCart</title>
     <link rel="stylesheet" href="css/stylesheet.css">
 </head>
 <body>
@@ -17,26 +17,16 @@
             </nav>
         </div>
     </header>
-
     <main class="container page-main">
-        <div class="page-heading"><span class="eyebrow">Review Your Order</span><h1>Shopping Cart</h1><p>Adjust quantities or remove items before checkout.</p></div>
-        <div class="cart-layout">
-            <section id="cart_items_page" class="cart-list" aria-label="Cart items"></section>
-            <aside class="order-summary">
-                <h2>Order Summary</h2>
-                <div><span>Subtotal</span><strong id="summary_subtotal">EGP 0</strong></div>
-                <div><span>Delivery</span><strong id="summary_shipping">Free</strong></div>
-                <div class="summary-total"><span>Total</span><strong id="summary_total">EGP 0</strong></div>
-                <a id="checkout_link" class="button button-full" href="checkout.html">Proceed to Checkout</a>
-                <a class="text-link" href="index.html">← Continue shopping</a>
-            </aside>
-        </div>
-        <section class="favorites-section">
-            <div class="section-heading"><div><span class="eyebrow">Saved for Later</span><h2>Your Favorites</h2></div></div>
-            <div id="favorites_container" class="products"></div>
-        </section>
+        <nav id="product_breadcrumb" class="breadcrumb" aria-label="Breadcrumb"></nav>
+        <section id="product_detail"></section>
+        <section id="product_information" class="product-information"></section>
+        <section id="bought_together" class="recommendation-section"></section>
+        <section class="reviews-section"><div class="section-heading"><div><span class="eyebrow">Verified Feedback</span><h2>Customer Reviews</h2></div></div><div id="product_reviews"></div></section>
+        <section class="related-section"><div class="section-heading"><div><span class="eyebrow">Same Category</span><h2>Related Products</h2></div></div><div id="related_products" class="products"></div></section>
+        <section class="related-section"><div class="section-heading"><div><span class="eyebrow">Selected for You</span><h2>You May Also Like</h2></div></div><div id="recommended_products" class="products"></div></section>
     </main>
     <script src="js/store.js"></script>
-    <script src="js/cartsprouduct.js"></script>
+    <script src="js/product.js"></script>
 </body>
 </html>
